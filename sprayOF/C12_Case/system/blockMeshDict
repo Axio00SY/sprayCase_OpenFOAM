@@ -1,0 +1,140 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 0.001;
+
+vertices
+(
+    //block0
+    (-8 8 20)  //0
+    (-17.07 17.07 20)  //1
+    (17.07 17.07 20)   //2
+    (8 8 20)   //3
+    (-8 8 101)  //4
+    (-17.07 17.07 101)  //5
+    (17.07 17.07 101)   //6
+    (8 8 101)   //7
+    
+    //block1
+    (8 -8 20)  //8
+    (17.07 -17.07 20)  //9
+    (8 -8 101)  //10
+    (17.07 -17.07 101)  //11
+
+    //block2
+    (-8 -8 20)  //12
+    (-17.07 -17.07 20)  //13
+    (-8 -8 101)  //14
+    (-17.07 -17.07 101)  //15
+);
+
+blocks
+(
+    /*0.25mm*/
+    hex (0 3 2 1 4 7 6 5) (63 12 324) simpleGrading (1 1 1)    
+    hex (3 8 9 2 7 10 11 6) (63 12 324) simpleGrading (1 1 1)
+    hex (8 12 13 9 10 14 15 11) (63 12 324) simpleGrading (1 1 1)    
+    hex (12 0 1 13 14 4 5 15) (63 12 324) simpleGrading (1 1 1)
+    hex (0 12 8 3 4 14 10 7) (63 63 324) simpleGrading (1 1 1)
+
+    /*0.5mm
+    hex (0 3 2 1 4 7 6 5) (40 12 202) simpleGrading (1 1 1)    
+    hex (3 8 9 2 7 10 11 6) (40 12 202) simpleGrading (1 1 1)
+    hex (8 12 13 9 10 14 15 11) (40 12 202) simpleGrading (1 1 1)    
+    hex (12 0 1 13 14 4 5 15) (40 12 202) simpleGrading (1 1 1)
+    hex (0 12 8 3 4 14 10 7) (40 40 202) simpleGrading (1 1 1)*/
+
+    /*2mm
+    hex (0 3 2 1 4 7 6 5) (16 8 81) simpleGrading (1 1 1)    
+    hex (3 8 9 2 7 10 11 6) (16 8 81) simpleGrading (1 1 1)
+    hex (8 12 13 9 10 14 15 11) (16 8 81) simpleGrading (1 1 1)    
+    hex (12 0 1 13 14 4 5 15) (16 8 81) simpleGrading (1 1 1)
+    hex (0 12 8 3 4 14 10 7) (16 16 81) simpleGrading (1 1 1)*/
+);
+
+edges
+(
+    //block0 arc
+    arc 1 2 (0 24.14 20)
+    arc 5 6 (0 24.14 101)
+
+    //block1 arc
+    arc 2 9 (24.14 0 20)
+    arc 6 11 (24.14 0 101)
+
+    //block2 arc
+    arc 9 13 (0 -24.14 20)
+    arc 11 15 (0 -24.14 101)
+
+    //block3 arc
+    arc 1 13 (-24.14 0 20)
+    arc 5 15 (-24.14 0 101)
+);
+
+boundary
+(
+    liner
+    {
+        type wall;
+        faces
+        (
+            (1 5 6 2)
+            (2 6 11 9)
+            (9 11 15 13)
+            (13 15 5 1)
+        );
+    }
+    cylinderHead
+    {
+        //type patch;
+        type wall;
+        faces
+        (
+            (4 5 6 7)
+            (6 7 10 11)
+            (10 11 15 14)
+            (15 14 4 5)
+            (4 7 10 14)
+        );
+    }
+    piston
+    {
+        type wall;
+        faces
+        (
+            (0 1 2 3)
+            (2 3 8 9)
+            (8 9 13 12)
+            (13 12 0 1)
+            (0 3 8 12)
+        );
+    }
+    /*axis
+    {
+        type empty;
+        faces
+        (
+            (0 4 4 0)
+        );
+    }*/
+);
+
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //
